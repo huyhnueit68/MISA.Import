@@ -239,7 +239,7 @@ namespace MISA.ImportDemo.Core.Services
             for (int columnIndex = 1; columnIndex <= totalColumns; columnIndex++)
             {
                 var headerName = rangeHeader[1, columnIndex].Value.ToString().Replace("\n", " ");
-                Console.WriteLine(headerName);
+
                 var headerNameRemoveDiacritics = RemoveDiacritics(headerName);
                 var importColumnTemplate = listColumnsTemplate.Where(col => RemoveDiacritics(col.ColumnTitle).Contains(headerNameRemoveDiacritics) && columnIndex == col.ColumnPosition).FirstOrDefault();
                 var address = rangeHeader[1, columnIndex].Address;
@@ -271,6 +271,7 @@ namespace MISA.ImportDemo.Core.Services
                 var property = entity.GetType().GetProperty(columnInsert ?? string.Empty, BindingFlags.IgnoreCase | BindingFlags.Instance | BindingFlags.Public);
                 if (property == null)
                     continue;
+
                 var propertyType = property.PropertyType;
                 // Kiểu ulong do đặc điểm entity framework tự động chuyển kiểu Boolean sang lên cần phải làm thêm việc này
                 if (propertyType == typeof(ulong) || propertyType == typeof(ulong?))
@@ -470,6 +471,7 @@ namespace MISA.ImportDemo.Core.Services
                     break;
                 case "Position":
                     var position = Positions.Where(n => n.PositionName.ToLower() == value.ToString().Trim().ToLower()).FirstOrDefault();
+
                     // Nếu không có vị trí tương ứng thì thực hiện thêm mới vị trí này:
                     if (position == null)
                     {
