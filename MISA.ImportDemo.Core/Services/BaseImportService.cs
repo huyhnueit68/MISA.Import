@@ -636,9 +636,15 @@ namespace MISA.ImportDemo.Core.Services
         protected virtual DateTime? GetProcessDateTimeValue<T>(T entity, object cellValue, Type type, ImportColumn importColumn = null) where T : BaseEntity
         {
             DateTime? dateReturn = null;
-            if (cellValue.GetType() == typeof(double))
-                return DateTime.FromOADate((double)cellValue);
             var dateString = cellValue.ToString();
+            var temp = Regex.Split(dateString, @"/").ToList();
+
+            while (temp.Count < 3)
+            {
+                temp.Insert(0, "01");
+            }
+            dateString = String.Join('-', temp);
+
             // Ngày tháng phải nhập theo định dạng (ngày/tháng/năm): 
             // VD hợp lệ: [25.04.2017] [02.04.2017] [2.4.2017] [25/04/2017] [5/12/2017] [15/2/2017] [25-04-2017]  [6-10-2017]  [16-5-2017] [09/26/2000 12:00:00 AM]  [09/26/2000 12:00:00 PM] 
             Regex dateValidRegex = new Regex(@"^([0]?[1-9]|[1|2][0-9]|[3][0|1])[./-]([0]?[1-9]|[1][0-2])[./-]([0-9]{4}|[0-9]{2})$");
